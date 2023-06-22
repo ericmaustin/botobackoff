@@ -40,9 +40,20 @@ class BotoBackoff:
             max_retries_before_backoff=0,
             added_error_codes: list = None,
             ignore_error_codes: list = None,
-            logger: logging.Logger = None,
             boto_session: Session = None,
     ):
+        """
+        :param client: the boto3 client to wrap or the service name to create a client for
+        :param interval_seconds: the initial number of seconds to wait between retries
+        :param max_retries: the maximum number of retries to attempt
+        :param backoff_rate: the rate at which the interval increases
+        :param jitter: the amount of jitter to add to the interval
+        :param max_retries_before_backoff: maximum number of retries before applying backoff
+        :param added_error_codes: additional error codes to retry on
+        :param ignore_error_codes: error codes to ignore, and return `None` for
+        :param boto_session: the boto3 session to use. If not provided, the default session will be used.
+            Ignored if a client is provided.
+        """
         _boto_client = client
 
         if isinstance(client, str):
@@ -59,7 +70,6 @@ class BotoBackoff:
         self._ignore_errors = ignore_error_codes or []
         self._backoff_rate = backoff_rate
         self._interval_seconds = interval_seconds
-        self._logger = logger if logger else logging.getLogger(__name__)
         self._max_retries = max_retries
         self._jitter = jitter
         self._max_retries_before_backoff = max_retries_before_backoff

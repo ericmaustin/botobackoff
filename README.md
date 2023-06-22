@@ -23,14 +23,22 @@ Example with the client wrapper:
 ```python
 from botobackoff import BotoBackoff
 
-import boto3
-
-wrapped_client = BotoBackoff(
-    boto3.client("s3"),
-    max_retries=5,
-)
+# `BotoBackoff` can be instantiated with a boto3 client or service name
+wrapped_client = BotoBackoff("s3", max_retries=5)
 
 print(wrapped_client.list_objects(Bucket="my-bucket"))
+```
+
+Example as context manager:
+```python
+from botobackoff import BotoBackoff
+
+wrapped_client = BotoBackoff("s3", max_retries=2)
+
+# use `with_options` to change any of the options for the context manager instance
+with wrapped_client.with_options(max_retries=5) as client:
+    print(client.list_objects(Bucket="my-bucket"))
+
 ```
 
 Example with the decorator:
