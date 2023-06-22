@@ -3,7 +3,6 @@ from __future__ import annotations, absolute_import
 import boto3
 import time
 import random
-import logging
 
 from functools import wraps
 from boto3.session import Session
