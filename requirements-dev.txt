@@ -1,0 +1,4 @@
+pytest
+twine
+boto3
+botocore
